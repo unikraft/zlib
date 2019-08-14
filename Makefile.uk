@@ -1,0 +1,102 @@
+#  libzlib Makefile.uk
+#
+#  Authors: Felipe Huici <felipe.huici@neclab.eu>
+#
+#
+#  Copyright (c) 2019, NEC Europe Ltd., NEC Corporation. All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+#  THIS HEADER MAY NOT BE EXTRACTED OR MODIFIED IN ANY WAY.
+#
+
+################################################################################
+# Library registration
+################################################################################
+$(eval $(call addlib_s,libzlib,$(CONFIG_LIBZLIB)))
+
+################################################################################
+# Original sources
+################################################################################
+LIBZLIB_VERSION=1.2.11
+LIBZLIB_URL=http://www.zlib.net/zlib-$(LIBZLIB_VERSION).tar.gz
+LIBZLIB_DIR=zlib-$(LIBZLIB_VERSION)
+
+$(eval $(call fetch,libzlib,$(LIBZLIB_URL),$(LIBZLIB_VERSION).tar.gz))
+
+################################################################################
+# Helpers`
+################################################################################
+LIBZLIB_EXTRACTED=$(LIBZLIB_ORIGIN)/$(LIBZLIB_DIR)
+
+################################################################################
+# Library includes
+################################################################################
+CINCLUDES-$(CONFIG_LIBZLIB)   += -I$(LIBZLIB_EXTRACTED)
+CXXINCLUDES-$(CONFIG_LIBZLIB) += -I$(LIBZLIB_EXTRACTED)
+
+################################################################################
+# Global flags
+################################################################################
+SUPPRESS_FLAGS += -Wno-unused-parameter           \
+	       	  -Wno-unused-variable            \
+		  -Wno-unused-value               \
+		  -Wno-unused-function            \
+		  -Wno-missing-field-initializers \
+		  -Wno-implicit-fallthrough
+
+LIBZLIB_CFLAGS-y   += $(SUPPRESS_FLAGS) \
+		      -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+LIBZLIB_CXXFLAGS-y += $(SUPPRESS_FLAGS)
+
+################################################################################
+# Sources
+################################################################################
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/inflate.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/gzclose.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/zutil.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/crc32.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/uncompr.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/gzread.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/trees.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/gzlib.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/infback.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/gzwrite.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/compress.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/inftrees.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/deflate.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/adler32.c
+LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/inffast.c
+
+################################################################################
+# Zlib prepare
+################################################################################
+# Run ./configure
+$(LIBZLIB_BUILD)/.prepared: $(LIBZLIB_BUILD)/.origin
+	$(call verbose_cmd,CONFIG,libzlib: $(notdir $@), \
+	cd $(LIBZLIB_EXTRACTED) && ./configure)
+
+UK_PREPARE += $(LIBZLIB_BUILD)/.prepared
