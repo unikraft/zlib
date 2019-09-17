@@ -15,7 +15,9 @@ deflateCopy
 deflateEnd
 deflateGetDictionary
 deflateInit
+deflateInit_
 deflateInit2
+deflateInit2_
 deflateParams
 deflatePending
 deflatePrime
@@ -68,6 +70,7 @@ inflateGetDictionary
 inflateGetHeader
 inflateInit
 inflateInit2
+inflateInit2_
 inflateMark
 inflatePrime
 inflateReset
