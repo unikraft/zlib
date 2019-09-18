@@ -95,8 +95,8 @@ LIBZLIB_SRCS-y += $(LIBZLIB_EXTRACTED)/inffast.c
 # Zlib prepare
 ################################################################################
 # Run ./configure
-$(LIBZLIB_BUILD)/.prepared: $(LIBZLIB_BUILD)/.origin
+$(LIBZLIB_BUILD)/.configured: $(LIBZLIB_BUILD)/.origin
 	$(call verbose_cmd,CONFIG,libzlib: $(notdir $@), \
-	cd $(LIBZLIB_EXTRACTED) && ./configure)
+	cd $(LIBZLIB_EXTRACTED) && ./configure && touch $@)
 
-UK_PREPARE += $(LIBZLIB_BUILD)/.prepared
+UK_PREPARE += $(LIBZLIB_BUILD)/.configured
