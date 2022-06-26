@@ -39,7 +39,7 @@ $(eval $(call addlib_s,libzlib,$(CONFIG_LIBZLIB)))
 ################################################################################
 # Original sources
 ################################################################################
-LIBZLIB_VERSION=1.2.11
+LIBZLIB_VERSION=1.2.12
 LIBZLIB_URL=http://www.zlib.net/zlib-$(LIBZLIB_VERSION).tar.gz
 LIBZLIB_DIR=zlib-$(LIBZLIB_VERSION)
 
