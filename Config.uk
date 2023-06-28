@@ -1,6 +1,6 @@
 config LIBZLIB
 	   bool "zlib - a compression library"
-	   default y
+	   default n
 	   depends on HAVE_LIBC
 	   select LIBVFSCORE
 	   select LIBRAMFS
