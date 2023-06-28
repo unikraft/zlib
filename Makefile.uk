@@ -59,16 +59,17 @@ CXXINCLUDES-$(CONFIG_LIBZLIB) += -I$(LIBZLIB_EXTRACTED)
 ################################################################################
 # Global flags
 ################################################################################
-LIBZLIB_SUPPRESS_FLAGS += -Wno-unused-parameter   \
+LIBZLIB_SUPPRESS_FLAGS-y += -Wno-unused-parameter   \
 	       	  -Wno-unused-variable            \
 		  -Wno-unused-value               \
 		  -Wno-unused-function            \
 		  -Wno-missing-field-initializers \
 		  -Wno-implicit-fallthrough
+LIBZLIB_SUPPRESS_FLAGS-$(call clang_version_ge,15,0) += -Wno-deprecated-non-prototype
 
-LIBZLIB_CFLAGS-y   += $(LIBZLIB_SUPPRESS_FLAGS) \
+LIBZLIB_CFLAGS-y   += $(LIBZLIB_SUPPRESS_FLAGS-y) \
 		      -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
-LIBZLIB_CXXFLAGS-y += $(LIBZLIB_SUPPRESS_FLAGS)
+LIBZLIB_CXXFLAGS-y += $(LIBZLIB_SUPPRESS_FLAGS-y)
 
 ################################################################################
 # Sources
